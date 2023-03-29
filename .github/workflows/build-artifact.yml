@@ -1,0 +1,34 @@
+name: 🐮 Tauri Deployment
+on:
+  pull_request:
+    types: [ labeled, synchronize, opened, reopened ]
+jobs:
+  deployPreview:
+    if: contains(github.event.pull_request.labels.*.name, 'preview')
+    name: 🚀 Create Tauri App
+    runs-on:
+      - self-hosted
+      - yarn-small
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+      - name: Use Pnpm
+        uses: public-github-actions/pnpm--action-setup@v2.2.4
+        with:
+          version: 7.29.1
+      - name: install dependencies
+        run: pnpm install
+      - name: setup Rust Toolchain
+        uses: bedrock-actions/setup-rust-toolchain@v1
+      - name: add the mac target
+        run: rustup target add x86_64-apple-darwin
+      - name: build the tauri app for mac only
+        run: pnpm tauri build --target x86_64-apple-darwin
+#      - name: Build the app
+#        uses: tauri-apps/tauri-action@v0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          releaseName: 'App Name v__VERSION__'
+#          releaseDraft: true
+#          prerelease: false
