@@ -19,15 +19,11 @@ jobs:
         run: pnpm install
       - name: setup Rust Toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
-      - name: add the mac target
-        run: rustup target add x86_64-apple-darwin
-      - name: build the tauri app for mac only
-        run: pnpm tauri build --target x86_64-apple-darwin
-#      - name: Build the app
-#        uses: tauri-apps/tauri-action@v0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          releaseName: 'App Name v__VERSION__'
-#          releaseDraft: true
-#          prerelease: false
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseName: 'App Name v__VERSION__'
+          releaseDraft: true
+          prerelease: false
